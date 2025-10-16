@@ -133,39 +133,212 @@ public function register(): void
 ```
 ecommerce/
 ├── app/
+│   ├── Console/
+│   │   └── Commands/         # Artisan Commands
 │   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Api/           # API Controllers
-│   │   │   ├── Admin/         # Admin Controllers
-│   │   │   ├── Auth/          # Authentication Controllers
-│   │   │   └── Web/           # Web Controllers
-│   │   ├── Middleware/        # Custom Middleware
-│   │   └── Requests/          # Form Request Validation
-│   ├── Models/                # Eloquent Models
-│   ├── Services/              # Business Logic Services
-│   │   ├── Contracts/         # Service Interfaces
-│   │   └── Implements/        # Service Implementations
-│   └── Providers/             # Service Providers
+│   │   ├── Controllers/      # All Controllers (26 files)
+│   │   │   ├── Admin/        # Admin Panel Controllers
+│   │   │   │   ├── Auth/
+│   │   │   │   │   └── LoginController.php
+│   │   │   │   ├── CategoryController.php
+│   │   │   │   ├── CouponController.php
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   ├── OrderController.php
+│   │   │   │   ├── ProductController.php
+│   │   │   │   ├── ShippingMethodController.php
+│   │   │   │   └── UserController.php
+│   │   │   ├── Api/          # API Controllers
+│   │   │   │   ├── AnalyticsController.php
+│   │   │   │   ├── AuthController.php
+│   │   │   │   ├── CartController.php
+│   │   │   │   ├── CategoryController.php
+│   │   │   │   ├── CouponController.php
+│   │   │   │   ├── OrderController.php
+│   │   │   │   ├── ProductController.php
+│   │   │   │   ├── ShippingMethodController.php
+│   │   │   │   └── UserController.php
+│   │   │   ├── Auth/         # Authentication Controllers
+│   │   │   │   ├── LoginController.php
+│   │   │   │   └── RegisterController.php
+│   │   │   ├── Web/          # Web Controllers
+│   │   │   │   ├── CartController.php
+│   │   │   │   ├── CheckoutController.php
+│   │   │   │   ├── HomeController.php
+│   │   │   │   ├── OrderController.php
+│   │   │   │   ├── ProductController.php
+│   │   │   │   └── ProfileController.php
+│   │   │   └── Controller.php
+│   │   ├── Middleware/       # Custom Middleware (1 file)
+│   │   ├── Requests/         # Form Request Validation (23 files)
+│   │   └── Resources/        # API Resources (10 files)
+│   ├── Listeners/            # Event Listeners
+│   │   └── MergeGuestCartOnLogin.php
+│   ├── Models/               # Eloquent Models (9 files)
+│   │   ├── Cart.php
+│   │   ├── CartItem.php
+│   │   ├── Category.php
+│   │   ├── Coupon.php
+│   │   ├── Order.php
+│   │   ├── OrderItem.php
+│   │   ├── Product.php
+│   │   ├── ShippingMethod.php
+│   │   └── User.php
+│   ├── Providers/            # Service Providers (4 files)
+│   │   ├── AppServiceProvider.php
+│   │   ├── AuthServiceProvider.php
+│   │   ├── EventServiceProvider.php
+│   │   └── RouteServiceProvider.php
+│   └── Services/             # Business Logic Services
+│       ├── Contracts/        # Service Interfaces (9 files)
+│       │   ├── AdminServiceInterface.php
+│       │   ├── CartServiceInterface.php
+│       │   ├── CategoryServiceInterface.php
+│       │   ├── CouponServiceInterface.php
+│       │   ├── OrderServiceInterface.php
+│       │   ├── ProductServiceInterface.php
+│       │   ├── ShippingMethodServiceInterface.php
+│       │   ├── ShippingServiceInterface.php
+│       │   └── UserServiceInterface.php
+│       ├── AdminService.php
+│       ├── CartService.php
+│       ├── CategoryService.php
+│       ├── CouponService.php
+│       ├── OrderService.php
+│       ├── ProductService.php
+│       ├── ShippingMethodService.php
+│       ├── ShippingService.php
+│       └── UserService.php
+├── bootstrap/
+│   ├── app.php
+│   ├── cache/                # Cached files
+│   │   ├── packages.php
+│   │   └── services.php
+│   └── providers.php
+├── config/                   # Configuration files (11 files)
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── filesystems.php
+│   ├── jwt.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── queue.php
+│   ├── services.php
+│   └── session.php
 ├── database/
-│   ├── migrations/            # Database Migrations
-│   ├── seeders/              # Database Seeders
-│   └── factories/            # Model Factories
+│   ├── database.sqlite       # SQLite Database
+│   ├── factories/            # Model Factories (3 files)
+│   │   ├── CategoryFactory.php
+│   │   ├── ProductFactory.php
+│   │   └── UserFactory.php
+│   ├── migrations/           # Database Migrations (12 files)
+│   │   ├── 0001_01_01_000000_create_users_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000002_create_jobs_table.php
+│   │   ├── 2024_01_01_000001_create_categories_table.php
+│   │   ├── 2024_01_01_000002_create_products_table.php
+│   │   ├── 2024_01_01_000003_create_coupons_table.php
+│   │   ├── 2024_01_01_000004_create_shipping_methods_table.php
+│   │   ├── 2024_01_01_000005_create_carts_table.php
+│   │   ├── 2024_01_01_000006_create_cart_items_table.php
+│   │   ├── 2024_01_01_000007_create_orders_table.php
+│   │   ├── 2024_01_01_000008_create_order_items_table.php
+│   │   └── 2025_10_16_095340_add_unit_price_to_cart_items_table.php
+│   └── seeders/              # Database Seeders (6 files)
+│       ├── CategorySeeder.php
+│       ├── CouponSeeder.php
+│       ├── DatabaseSeeder.php
+│       ├── ProductSeeder.php
+│       ├── ShippingMethodSeeder.php
+│       └── UserSeeder.php
+├── public/                   # Public assets
+│   ├── favicon.ico
+│   ├── hot
+│   ├── index.php
+│   ├── robots.txt
+│   └── storage/              # Storage symlink
 ├── resources/
-│   ├── views/                # Blade Templates
-│   │   ├── admin/           # Admin Views
-│   │   ├── auth/            # Auth Views
-│   │   ├── cart/            # Cart Views
-│   │   ├── checkout/        # Checkout Views
-│   │   ├── orders/          # Order Views
-│   │   ├── products/        # Product Views
-│   │   └── profile/         # Profile Views
-│   ├── css/                 # Stylesheets
-│   └── js/                  # JavaScript Files
-├── routes/
-│   ├── web.php              # Web Routes
-│   ├── api.php              # API Routes
-│   └── admin.php            # Admin Routes
-└── storage/                 # File Storage
+│   ├── css/
+│   │   └── app.css
+│   ├── js/
+│   │   ├── app.js
+│   │   └── bootstrap.js
+│   └── views/                # Blade Templates
+│       ├── admin/            # Admin Views (22 files)
+│       │   ├── auth/
+│       │   │   └── login.blade.php
+│       │   ├── categories/
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   └── index.blade.php
+│       │   ├── coupons/
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   └── index.blade.php
+│       │   ├── dashboard.blade.php
+│       │   ├── layouts/
+│       │   │   └── app.blade.php
+│       │   ├── orders/
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   ├── products/
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   ├── shipping-methods/
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   └── index.blade.php
+│       │   └── users/
+│       │       ├── create.blade.php
+│       │       ├── edit.blade.php
+│       │       ├── index.blade.php
+│       │       └── show.blade.php
+│       ├── auth/             # Auth Views (2 files)
+│       ├── cart/             # Cart Views (1 file)
+│       ├── checkout/         # Checkout Views (1 file)
+│       ├── home.blade.php
+│       ├── layouts/          # Layout Views (1 file)
+│       ├── orders/           # Order Views (2 files)
+│       ├── products/         # Product Views (2 files)
+│       ├── profile/          # Profile Views (2 files)
+│       └── welcome.blade.php
+├── routes/                   # Route definitions (4 files)
+│   ├── admin.php             # Admin Routes
+│   ├── api.php               # API Routes
+│   ├── console.php           # Console Routes
+│   └── web.php               # Web Routes
+├── storage/                  # File Storage
+│   ├── app/
+│   │   ├── private/          # Private storage
+│   │   └── public/           # Public storage
+│   ├── framework/
+│   │   ├── cache/            # Framework cache
+│   │   ├── sessions/         # Session files
+│   │   └── views/            # Compiled views
+│   └── logs/
+│       └── laravel.log       # Application logs
+├── tests/                    # Test files
+│   ├── Feature/
+│   │   └── ExampleTest.php
+│   ├── TestCase.php
+│   └── Unit/
+│       └── ExampleTest.php
+├── vendor/                   # Composer dependencies
+├── artisan                   # Laravel Artisan CLI
+├── composer.json             # Composer configuration
+├── composer.lock             # Composer lock file
+├── package.json              # NPM configuration
+├── package-lock.json         # NPM lock file
+├── phpunit.xml               # PHPUnit configuration
+├── vite.config.js            # Vite configuration
+├── POSTMAN_COLLECTION_README.md
+├── postman_pre_request_script.js
+├── ShopMaster_API_Collection.postman_collection.json
+├── test-image.html
+└── README.md                 # Project documentation
 ```
 
 ## 🗄️ Database Schema
