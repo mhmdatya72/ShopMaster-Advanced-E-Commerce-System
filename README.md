@@ -10,6 +10,12 @@
 </div>
 
 ## 📋 Overview
+## 📎 Documentation & Demo
+
+- 📘 **API Documentation (Postman)**: [View Full API Docs](https://documenter.getpostman.com/view/33216800/2sB3QNqoY7)
+- 🎥 **Live Demo Video**: [Watch the Demo](https://screenrec.com/share/5VTPoj2hki)
+
+These resources demonstrate all API endpoints, request/response examples, and a walkthrough of the user interface, shopping flow, and checkout process.
 
 **ShopMaster** is an advanced, comprehensive e-commerce system built on Laravel 12 with a modern user interface and exceptional user experience. The system provides all essential and advanced e-commerce features with a focus on security, performance, and scalability.
 
@@ -913,5 +919,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
   <p>Made with ❤️ using Laravel</p>
-  <p>© 2024 ShopMaster. All rights reserved.</p>
+  <p>© 2025 ShopMaster. All rights reserved.</p>
 </div>

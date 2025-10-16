@@ -24,25 +24,25 @@ use App\Http\Controllers\Api\ShippingMethodController;
 */
 
 // Public API routes with rate limiting
-Route::prefix('api/auth')->middleware(['throttle:5,1'])->group(function () {
+Route::prefix('auth')->middleware(['throttle:5,1'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
 });
 
 // Public products route (no auth required)
-Route::get('/api/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'index']);
 
 // Protected API routes
 Route::middleware('auth:api')->group(function () {
     // Auth routes
-    Route::prefix('api/auth')->group(function () {
+    Route::prefix('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
         Route::get('/user-profile', [AuthController::class, 'userProfile']);
     });
 
     // Cart routes with rate limiting
-    Route::prefix('api/cart')->middleware(['throttle:60,1'])->group(function () {
+    Route::prefix('cart')->middleware(['throttle:60,1'])->group(function () {
         Route::get('/', [CartController::class, 'index']);
         Route::post('/add', [CartController::class, 'add']);
         Route::put('/update', [CartController::class, 'update']);
@@ -53,7 +53,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Order routes
-    Route::prefix('api/orders')->group(function () {
+    Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index']);
         Route::get('/{id}', [OrderController::class, 'show']);
         Route::post('/', [OrderController::class, 'store']);
@@ -61,7 +61,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Products API
-    Route::prefix('api/products')->group(function () {
+    Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'index']);
         Route::post('/', [ProductController::class, 'store']);
         Route::get('/{id}', [ProductController::class, 'show']);
@@ -70,7 +70,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Categories API
-    Route::prefix('api/categories')->group(function () {
+    Route::prefix('categories')->group(function () {
         Route::get('/', [CategoryController::class, 'index']);
         Route::post('/', [CategoryController::class, 'store']);
         Route::get('/{id}', [CategoryController::class, 'show']);
@@ -79,7 +79,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Coupons API
-    Route::prefix('api/coupons')->group(function () {
+    Route::prefix('coupons')->group(function () {
         Route::get('/', [CouponController::class, 'index']);
         Route::post('/', [CouponController::class, 'store']);
         Route::get('/{id}', [CouponController::class, 'show']);
@@ -89,7 +89,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Shipping Methods API
-    Route::prefix('api/shipping')->group(function () {
+    Route::prefix('shipping')->group(function () {
         Route::get('/', [ShippingMethodController::class, 'index']);
         Route::post('/', [ShippingMethodController::class, 'store']);
         Route::get('/active', [ShippingMethodController::class, 'active']);
@@ -99,7 +99,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Users API
-    Route::prefix('api/users')->group(function () {
+    Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::get('/{id}', [UserController::class, 'show']);
         Route::put('/{id}', [UserController::class, 'update']);
@@ -107,7 +107,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Analytics API
-    Route::prefix('api/analytics')->group(function () {
+    Route::prefix('analytics')->group(function () {
         Route::get('/sales', [AnalyticsController::class, 'sales']);
         Route::get('/users', [AnalyticsController::class, 'users']);
         Route::get('/dashboard', [AnalyticsController::class, 'dashboard']);
