@@ -920,10 +920,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support & Contact
 
-- **Email**: support@shopmaster.com
-- **Website**: https://shopmaster.com
-- **Documentation**: https://docs.shopmaster.com
-- **Issues**: [GitHub Issues](https://github.com/your-username/shopmaster/issues)
+- **Email**: mohamedatya563@gmail.com
+- **Phone/WhatsAPP**:+201098387072 
+- **Issues**: [GitHub Issues](https://github.com/mhmdatya72/ShopMaster-Advanced-E-Commerce-System.git/issues)
 
 ## 🙏 Acknowledgments
 
