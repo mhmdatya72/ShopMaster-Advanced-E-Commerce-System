@@ -16,86 +16,59 @@
 ## ✨ Key Features
 
 ### 🎨 Frontend (Client-Facing)
-- **Homepage** — Featured products showcase
-- **Product Listing** — Advanced search, filter, and sort functionality
-- **Product Detail Page** — Multiple images and comprehensive product information
-- **Shopping Cart** — Real-time updates with coupon application
-- **Checkout Page** — Secure payment with shipping method selection
-- **User Profile** — Order tracking and profile management
-- **Order Details** — Complete order history and tracking
-- **Responsive Design** — Works seamlessly on all devices
+- **Modern Homepage** — Animated hero section with featured products showcase
+- **Product Catalog** — Product listing with search and category filtering
+- **Product Details** — Comprehensive product information display
+- **Shopping Cart** — Real-time cart updates with coupon application
+- **Checkout Process** — Secure checkout with shipping method selection
+- **User Profile** — Order history and profile management
+- **Order Tracking** — Complete order details and status tracking
+- **Responsive Design** — Mobile-first design with TailwindCSS
 
 ### ⚙️ Backend (Admin & API)
-- **Comprehensive API** — RESTful endpoints for all operations
-- **Advanced Admin Dashboard** — Complete management interface
-- **JWT Authentication** — Secure token-based authentication
-- **Product & Category Management** — With image upload capabilities
-- **Coupon System** — Multiple discount types and validation
-- **Shipping Management** — Configurable shipping methods and costs
-- **Analytics & Statistics** — Detailed reporting and insights
+- **RESTful API** — Complete API endpoints for all operations
+- **Admin Dashboard** — Modern admin interface with statistics
+- **JWT Authentication** — Secure token-based API authentication
+- **Content Management** — Product, category, and user management
+- **Coupon System** — Percentage and fixed amount discounts
+- **Shipping Management** — Configurable shipping methods
+- **Order Management** — Complete order processing system
 
 ### 🔐 Security & Protection
-- **JWT Authentication** — With automatic token refresh for API
-- **CSRF Protection** — For all web forms
-- **Password Encryption** — Using Bcrypt
-- **Data Validation** — At all levels with Form Requests
-- **Admin Protection** — Custom middleware for admin routes
-- **Rate Limiting** — ThrottleRequests middleware for API endpoints
-- **CORS Configuration** — For frontend domain access
-- **Input Sanitization** — XSS protection on all inputs
+- **JWT Authentication** — Secure token-based API authentication with refresh
+- **CSRF Protection** — Built-in Laravel CSRF protection for web forms
+- **Password Encryption** — Bcrypt hashing for all passwords
+- **Form Request Validation** — Comprehensive validation at all levels
+- **Admin Middleware** — Custom admin authentication middleware
+- **Rate Limiting** — API endpoints protected with throttling (5 req/min for auth, 60 req/min for cart)
+- **CORS Configuration** — Configured for frontend domain access
+- **Input Sanitization** — XSS protection through Blade templating
 - **SQL Injection Prevention** — Eloquent ORM with parameterized queries
 
 ## 🚀 Technologies Used
 
 ### Backend
-- **Laravel 12.x** — Advanced PHP framework
-- **PHP 8.2+** — Core programming language
-- **MySQL/SQLite** — Database management
-- **JWT Auth** — Token-based authentication for API
+- **Laravel 12.x** — Modern PHP framework with advanced features
+- **PHP 8.2+** — Latest PHP with modern syntax
+- **MySQL** — Primary database management
+- **JWT Auth** — Secure token-based API authentication
 
 ### Frontend
-- **Blade Templates** — Template engine
-- **TailwindCSS 3.x** — CSS framework
-- **Alpine.js** — Lightweight JavaScript library
-- **Vanilla JavaScript** — For API interaction
+- **Blade Templates** — Laravel's powerful templating engine
+- **TailwindCSS 3.x** — Utility-first CSS framework
+- **Alpine.js** — Lightweight reactive JavaScript framework
+- **Vanilla JavaScript** — Clean API interactions
 
 ### Development Tools
-- **Laravel Pint** — Code formatting
-- **Laravel Sail** — Development environment
-- **PHPUnit** — Unit testing
-- **Faker** — Test data generation
+- **Laravel Pint** — Code formatting and style enforcement
+- **PHPUnit** — Comprehensive testing framework
+- **Faker** — Realistic test data generation
 
 ## 🏗️ Architecture & Design Patterns
 
-### SOLID Principles Implementation
+### Service Layer Architecture
 
-#### 1. **Single Responsibility Principle (SRP)**
-- **Controllers**: Handle only HTTP requests/responses
-- **Services**: Contain business logic only
-- **Models**: Manage data relationships and validation
-- **Repositories**: Handle data access operations
-
-#### 2. **Open/Closed Principle (OCP)**
-- **Service Interfaces**: Allow extension without modification
-- **Middleware**: Extensible authentication and authorization
-- **Event Listeners**: Pluggable event handling
-
-#### 3. **Liskov Substitution Principle (LSP)**
-- **Service Implementations**: Interchangeable through interfaces
-- **Payment Gateways**: Consistent interface for different providers
-- **Storage Drivers**: Unified interface for different storage types
-
-#### 4. **Interface Segregation Principle (ISP)**
-- **Focused Interfaces**: Separate concerns (ProductService, CartService, etc.)
-- **Specific Contracts**: Each service has its own interface
-- **Minimal Dependencies**: Controllers depend only on what they need
-
-#### 5. **Dependency Inversion Principle (DIP)**
-- **Service Container**: High-level modules don't depend on low-level modules
-- **Interface Binding**: Concrete implementations bound to interfaces
-- **Dependency Injection**: Constructor injection throughout the application
-
-### Design Patterns Used
+The application follows a clean service layer pattern with proper separation of concerns:
 
 #### 1. **Service Layer Pattern**
 ```php
@@ -113,109 +86,17 @@ interface ProductServiceInterface
 class ProductService implements ProductServiceInterface
 {
     public function __construct(
-        private ProductRepositoryInterface $productRepository,
-        private ImageServiceInterface $imageService
+        private ProductRepositoryInterface $productRepository
     ) {}
 }
 ```
 
-#### 2. **Repository Pattern**
-```php
-interface ProductRepositoryInterface
-{
-    public function find(int $id): ?Product;
-    public function create(array $data): Product;
-    public function update(int $id, array $data): Product;
-    public function delete(int $id): bool;
-    public function paginate(int $perPage): LengthAwarePaginator;
-}
-```
-
-#### 3. **Factory Pattern**
-```php
-class PaymentGatewayFactory
-{
-    public static function create(string $type): PaymentGatewayInterface
-    {
-        return match($type) {
-            'stripe' => new StripeGateway(),
-            'paypal' => new PayPalGateway(),
-            'square' => new SquareGateway(),
-            default => throw new InvalidArgumentException("Unsupported gateway: {$type}")
-        };
-    }
-}
-```
-
-#### 4. **Observer Pattern**
-```php
-class OrderObserver
-{
-    public function created(Order $order): void
-    {
-        // Send confirmation email
-        // Update inventory
-        // Log order creation
-    }
-    
-    public function updated(Order $order): void
-    {
-        // Handle status changes
-        // Send notifications
-    }
-}
-```
-
-#### 5. **Strategy Pattern**
-```php
-interface DiscountStrategyInterface
-{
-    public function calculate(float $amount, array $parameters): float;
-}
-
-class PercentageDiscountStrategy implements DiscountStrategyInterface
-{
-    public function calculate(float $amount, array $parameters): float
-    {
-        return $amount * ($parameters['percentage'] / 100);
-    }
-}
-```
-
-### Service Container Architecture
-
-#### Service Registration
-```php
-// AppServiceProvider.php
-public function register(): void
-{
-    // Service Layer Bindings
-    $this->app->bind(ProductServiceInterface::class, ProductService::class);
-    $this->app->bind(CartServiceInterface::class, CartService::class);
-    $this->app->bind(OrderServiceInterface::class, OrderService::class);
-    $this->app->bind(CouponServiceInterface::class, CouponService::class);
-    $this->app->bind(ShippingServiceInterface::class, ShippingService::class);
-    $this->app->bind(AdminServiceInterface::class, AdminService::class);
-    $this->app->bind(UserServiceInterface::class, UserService::class);
-    
-    // Repository Layer Bindings
-    $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
-    $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
-    
-    // External Service Bindings
-    $this->app->bind(PaymentGatewayInterface::class, StripeGateway::class);
-    $this->app->bind(EmailServiceInterface::class, MailgunEmailService::class);
-}
-```
-
-#### Dependency Injection Usage
+#### 2. **Dependency Injection**
 ```php
 class ProductController extends Controller
 {
     public function __construct(
-        private ProductServiceInterface $productService,
-        private ImageServiceInterface $imageService,
-        private CacheServiceInterface $cacheService
+        private ProductServiceInterface $productService
     ) {}
     
     public function store(StoreProductRequest $request)
@@ -223,6 +104,21 @@ class ProductController extends Controller
         $product = $this->productService->createProduct($request->validated());
         return response()->json(['success' => true, 'data' => $product]);
     }
+}
+```
+
+#### 3. **Service Container Registration**
+```php
+// AppServiceProvider.php
+public function register(): void
+{
+    $this->app->bind(ProductServiceInterface::class, ProductService::class);
+    $this->app->bind(CartServiceInterface::class, CartService::class);
+    $this->app->bind(OrderServiceInterface::class, OrderService::class);
+    $this->app->bind(CouponServiceInterface::class, CouponService::class);
+    $this->app->bind(ShippingServiceInterface::class, ShippingService::class);
+    $this->app->bind(AdminServiceInterface::class, AdminService::class);
+    $this->app->bind(UserServiceInterface::class, UserService::class);
 }
 ```
 
@@ -343,6 +239,8 @@ ecommerce/
 - cart_id (Cart Reference)
 - product_id (Product Reference)
 - quantity (Item Quantity)
+- price (Item Price)
+- unit_price (Unit Price at time of adding)
 - created_at, updated_at
 ```
 
@@ -429,78 +327,74 @@ $total = $subtotal - $discount + $shipping;
 ### Authentication Endpoints
 - `POST /api/auth/login` — User login
 - `POST /api/auth/register` — User registration
-- `POST /api/auth/logout` — User logout
-- `POST /api/auth/refresh` — Refresh JWT token
-- `GET /api/auth/user-profile` — Get user profile
-
-### User Management
-- `GET /api/users` — Get all users (Admin)
-- `GET /api/users/{id}` — Get user by ID
-- `PUT /api/users/{id}` — Update user
-- `DELETE /api/users/{id}` — Delete user (Admin)
+- `POST /api/auth/logout` — User logout (Protected)
+- `POST /api/auth/refresh` — Refresh JWT token (Protected)
+- `GET /api/auth/user-profile` — Get user profile (Protected)
 
 ### Product Management
 - `GET /api/products` — Get all products (Public)
-- `POST /api/products` — Create product (Admin)
-- `GET /api/products/{id}` — Get product by ID
-- `PUT /api/products/{id}` — Update product (Admin)
-- `DELETE /api/products/{id}` — Delete product (Admin)
+- `POST /api/products` — Create product (Protected)
+- `GET /api/products/{id}` — Get product by ID (Protected)
+- `PUT /api/products/{id}` — Update product (Protected)
+- `DELETE /api/products/{id}` — Delete product (Protected)
 
 ### Category Management
-- `GET /api/categories` — Get all categories
-- `POST /api/categories` — Create category (Admin)
-- `GET /api/categories/{id}` — Get category by ID
-- `PUT /api/categories/{id}` — Update category (Admin)
-- `DELETE /api/categories/{id}` — Delete category (Admin)
+- `GET /api/categories` — Get all categories (Protected)
+- `POST /api/categories` — Create category (Protected)
+- `GET /api/categories/{id}` — Get category by ID (Protected)
+- `PUT /api/categories/{id}` — Update category (Protected)
+- `DELETE /api/categories/{id}` — Delete category (Protected)
 
 ### Order Management
-- `GET /api/orders` — Get all orders (Admin)
-- `GET /api/orders/{id}` — Get order by ID
-- `PUT /api/orders/{id}` — Update order (Admin)
+- `GET /api/orders` — Get all orders (Protected)
+- `GET /api/orders/{id}` — Get order by ID (Protected)
+- `POST /api/orders` — Create order (Protected)
+- `POST /api/orders/{id}/cancel` — Cancel order (Protected)
 
 ### Coupon Management
-- `GET /api/coupons` — Get all coupons (Admin)
-- `POST /api/coupons` — Create coupon (Admin)
-- `GET /api/coupons/{id}` — Get coupon by ID
-- `PUT /api/coupons/{id}` — Update coupon (Admin)
-- `DELETE /api/coupons/{id}` — Delete coupon (Admin)
-- `POST /api/coupons/validate` — Validate coupon code
+- `GET /api/coupons` — Get all coupons (Protected)
+- `POST /api/coupons` — Create coupon (Protected)
+- `GET /api/coupons/{id}` — Get coupon by ID (Protected)
+- `PUT /api/coupons/{id}` — Update coupon (Protected)
+- `DELETE /api/coupons/{id}` — Delete coupon (Protected)
+- `POST /api/coupons/validate` — Validate coupon code (Protected)
 
 ### Shipping Methods
-- `GET /api/shipping` — Get all shipping methods
-- `POST /api/shipping` — Create shipping method (Admin)
-- `GET /api/shipping/active` — Get active shipping methods
-- `GET /api/shipping/{id}` — Get shipping method by ID
-- `PUT /api/shipping/{id}` — Update shipping method (Admin)
-- `DELETE /api/shipping/{id}` — Delete shipping method (Admin)
+- `GET /api/shipping` — Get all shipping methods (Protected)
+- `POST /api/shipping` — Create shipping method (Protected)
+- `GET /api/shipping/active` — Get active shipping methods (Protected)
+- `GET /api/shipping/{id}` — Get shipping method by ID (Protected)
+- `PUT /api/shipping/{id}` — Update shipping method (Protected)
+- `DELETE /api/shipping/{id}` — Delete shipping method (Protected)
 
 ### Cart Management
-- `GET /api/cart` — Get cart contents
-- `POST /api/cart/add` — Add item to cart
-- `PUT /api/cart/update` — Update cart item
-- `DELETE /api/cart/remove` — Remove item from cart
-- `DELETE /api/cart/clear` — Clear entire cart
-- `POST /api/cart/apply-coupon` — Apply coupon to cart
-- `POST /api/cart/set-shipping` — Set shipping method
+- `GET /api/cart` — Get cart contents (Protected)
+- `POST /api/cart/add` — Add item to cart (Protected)
+- `PUT /api/cart/update` — Update cart item (Protected)
+- `DELETE /api/cart/remove` — Remove item from cart (Protected)
+- `DELETE /api/cart/clear` — Clear entire cart (Protected)
+- `POST /api/cart/apply-coupon` — Apply coupon to cart (Protected)
+- `POST /api/cart/set-shipping` — Set shipping method (Protected)
 
-### Analytics
-- `GET /api/analytics/sales` — Sales statistics (Admin)
-- `GET /api/analytics/users` — User statistics (Admin)
-- `GET /api/analytics/dashboard` — Dashboard data (Admin)
+### User Management
+- `GET /api/users` — Get all users (Protected)
+- `GET /api/users/{id}` — Get user by ID (Protected)
+- `PUT /api/users/{id}` — Update user (Protected)
+- `DELETE /api/users/{id}` — Delete user (Protected)
 
 ## 🌐 Web Routes
 
 ### Public Routes
-- `GET /` — Homepage with featured products
-- `GET /products` — Product listing page
+- `GET /` — Homepage with animated hero section and featured products
+- `GET /products` — Product listing page with search and filtering
 - `GET /products/{slug}` — Product detail page
-- `GET /login` — Login page
-- `POST /login` — Process login
-- `GET /register` — Registration page
-- `POST /register` — Process registration
+- `GET /login` — User login page
+- `POST /login` — Process user login
+- `GET /register` — User registration page
+- `POST /register` — Process user registration
 
 ### Protected Routes (Require Authentication)
-- `GET /cart` — Shopping cart page
+- `GET /cart` — Shopping cart page with real-time updates
 - `GET /cart/count` — Get cart item count
 - `POST /cart/add` — Add item to cart
 - `PUT /cart/update` — Update cart item quantity
@@ -510,16 +404,25 @@ $total = $subtotal - $discount + $shipping;
 - `POST /cart/update-shipping` — Update shipping method
 - `GET /cart/totals` — Get cart totals
 
-- `GET /checkout` — Checkout page (Protected)
-- `POST /checkout` — Process checkout (Protected)
+- `GET /checkout` — Checkout page with shipping selection
+- `POST /checkout` — Process checkout and create order
 
 - `GET /orders` — User order history
-- `GET /orders/{id}` — Order details
+- `GET /orders/{id}` — Order details and tracking
 - `POST /orders/{id}/cancel` — Cancel order
 
 - `GET /profile` — User profile page
 - `GET /profile/edit` — Edit profile page
 - `PUT /profile/update` — Update profile
+
+### Admin Routes (Require Admin Authentication)
+- `GET /admin/dashboard` — Admin dashboard with statistics
+- `GET /admin/products` — Product management
+- `GET /admin/categories` — Category management
+- `GET /admin/orders` — Order management
+- `GET /admin/coupons` — Coupon management
+- `GET /admin/shipping-methods` — Shipping method management
+- `GET /admin/users` — User management
 
 ## 🛠️ Installation & Setup
 
@@ -723,25 +626,56 @@ const products = await fetch('/api/products', {
 ### For Users
 
 #### Creating a New Account
-1. Navigate to the registration page
-2. Fill in the required information
-3. Click "Create Account"
+1. Visit the homepage at `http://127.0.0.1:8000`
+2. Click "Register" in the navigation
+3. Fill in name, email, and password
+4. Click "Create Account"
+
+#### Browsing Products
+1. Visit the products page at `http://127.0.0.1:8000/products`
+2. Use search functionality to find specific products
+3. Filter by categories using the sidebar
+4. Click on any product to view details
 
 #### Adding Product to Cart
-1. Browse products
-2. Click "Add to Cart"
-3. Choose desired quantity
+1. On any product page, select desired quantity
+2. Click "Add to Cart" button
+3. Cart will update in real-time with the new item
 
 #### Applying a Coupon
-1. Go to cart page
-2. Enter coupon code
-3. Click "Apply"
+1. Go to cart page at `http://127.0.0.1:8000/cart`
+2. Enter coupon code in the "Apply Coupon" field
+3. Click "Apply" to see discount applied
 
 #### Completing an Order
-1. Navigate to checkout page
-2. Enter shipping address
-3. Choose shipping method
-4. Complete payment process
+1. Navigate to checkout page at `http://127.0.0.1:8000/checkout`
+2. Enter shipping and billing information
+3. Select preferred shipping method
+4. Review order summary and complete purchase
+
+### For Administrators
+
+#### Accessing Admin Panel
+1. Visit `http://127.0.0.1:8000/admin/login`
+2. Login with admin credentials
+3. Access dashboard with store statistics
+
+#### Managing Products
+1. Go to "Products" section in admin panel
+2. Click "Add New Product" to create products
+3. Edit existing products or manage inventory
+4. Use the delete confirmation modal for safe deletion
+
+#### Managing Coupons
+1. Navigate to "Coupons" section
+2. Create percentage or fixed amount discounts
+3. Set usage limits and expiration dates
+4. Monitor coupon usage statistics
+
+#### Order Management
+1. View all orders in the "Orders" section
+2. Update order status (pending, processing, shipped, delivered)
+3. View detailed order information and customer details
 
 ## 🔌 API Documentation
 
@@ -821,6 +755,50 @@ Content-Type: application/json
 
 {
     "code": "SAVE20"
+}
+```
+
+#### Set Shipping Method
+```http
+POST /api/cart/set-shipping
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+    "shipping_id": 1
+}
+```
+
+#### Get Cart Contents
+```http
+GET /api/cart
+Authorization: Bearer {token}
+```
+
+#### Create Order
+```http
+POST /api/orders
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+    "shipping_address": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+    },
+    "billing_address": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zip": "10001",
+        "country": "USA"
+    },
+    "notes": "Please deliver after 5 PM"
 }
 ```
 
